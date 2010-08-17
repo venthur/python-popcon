@@ -47,11 +47,11 @@ import urllib2
 import gzip
 import StringIO
 import cPickle as pickle
-
+import os
 
 # week in seconds
 EXPIRY = 86400 * 7
-DUMPFILE = 'popcon.dump'
+DUMPFILE = os.path.expanduser('~/popcon.cache')
 RESULTS_URL = "http://popcon.debian.org/all-popcon-results.txt.gz"
 
 def _fetch():
