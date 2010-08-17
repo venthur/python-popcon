@@ -7,6 +7,7 @@ setup(name='python-popcon',
         description="Python inteface to Debian's popcon database",
         author='Bastian Venthur',
         author_email='venthur@debian.org',
+        url='http://github.com/venthur/python-popcon',
         py_modules=['popcon'],
         package_dir={"": "src"},
         )
