@@ -39,6 +39,8 @@ numbers is the number of installations as reported by `popcon.package`.
 Behind the scences popcon will try to use cached infomation saved in
 `DUMPFILE`. If that file is not available, or older than `EXPIRY` seconds
 (default is 7 days) it will download fresh data and save that into `DUMPFILE`.
+
+The cached data will be kept in memory unless `KEEP_DATA` is set to False.
 """
 
 __author__ = 'Bastian Venthur <venthur@debian.org>'
@@ -63,6 +65,9 @@ except AttributeError:
 EXPIRY = 86400 * 7
 DUMPFILE = os.path.join(xdg.BaseDirectory.xdg_cache_home, 'popcon', 'debian') # implements BASEDIRSPEC
 RESULTS_URL = "http://popcon.debian.org/all-popcon-results.txt.gz"
+KEEP_DATA = True
+cached_data = None
+cached_timestamp = None
 
 def _fetch():
     """Fetch all popcon results and return unparsed data."""
@@ -117,13 +122,20 @@ def package_raw(*packages):
         no-files: is the number of people whose entry didn't contain enough 
                   information (atime and ctime were 0)
     """
-    data = None
+    global cached_data, cached_timestamp
+
     earliest_possible_mtime = max(time.time() - EXPIRY, os.stat(__file__).st_mtime)
-    if os.path.exists(DUMPFILE) and os.stat(DUMPFILE).st_mtime > earliest_possible_mtime:
+
+    if cached_data is not None and cached_timestamp <= earliest_possible_mtime:
+        cached_data = None
+
+    data = cached_data
+    if data is None and os.path.exists(DUMPFILE) and os.stat(DUMPFILE).st_mtime > earliest_possible_mtime:
         try:
             handle = open(DUMPFILE, 'r')
             data = pickle.load(handle)
             handle.close()
+            cached_timestamp = os.stat(DUMPFILE).st_mtime
         except:
             warnings.warn("Problems loading cache file: %s"%e)
 
@@ -135,9 +147,12 @@ def package_raw(*packages):
         handle = open(DUMPFILE, 'w')
         pickle.dump(data, handle)
         handle.close()
+        cached_timestamp = time.time()
     ans = dict()
     for pkg in packages:
         if pkg in data:
             ans[pkg] = data[pkg]
+    if KEEP_DATA:
+        cached_data = data
     return ans
 
