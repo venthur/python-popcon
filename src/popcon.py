@@ -51,6 +51,7 @@ import time
 import urllib2
 import gzip
 import StringIO
+import tempfile
 import cPickle as pickle
 import os
 import collections
@@ -144,9 +145,15 @@ def package_raw(*packages):
         data = _parse(data)
         if not os.path.isdir(os.path.dirname(DUMPFILE)): # i still think that makedirs should behave like mkdir -p
             os.makedirs(os.path.dirname(DUMPFILE), mode=0700) # mode according to BASEDIRSPEC
-        handle = open(DUMPFILE, 'w')
-        pickle.dump(data, handle)
-        handle.close()
+        # as soon as python2.6 is in stable, we can use delete=False here and replace the flush/rename/try:close sequence with the cleaner close/rename.
+        temp = tempfile.NamedTemporaryFile(dir=os.path.dirname(DUMPFILE))
+        pickle.dump(data, temp)
+        temp.flush()
+        os.rename(temp.name, DUMPFILE)
+        try:
+            temp.close()
+        except OSError:
+            pass
         cached_timestamp = time.time()
     ans = dict()
     for pkg in packages:
