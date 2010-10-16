@@ -137,7 +137,7 @@ def package_raw(*packages):
         handle.close()
     ans = dict()
     for pkg in packages:
-        if data.has_key(pkg):
+        if pkg in data:
             ans[pkg] = data[pkg]
     return ans
 
