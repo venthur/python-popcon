@@ -17,6 +17,8 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+# relevant specifications:
+# * BASEDIRSPEC: http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html
 
 """Get Debian popcon values for given packages.
 
@@ -49,6 +51,7 @@ import StringIO
 import cPickle as pickle
 import os
 import collections
+import xdg.BaseDirectory
 
 try:
     Package = collections.namedtuple("Package", ["vote", "old", "recent", "no_files"])
@@ -57,7 +60,7 @@ except AttributeError:
 
 # week in seconds
 EXPIRY = 86400 * 7
-DUMPFILE = os.path.expanduser('~/popcon.cache')
+DUMPFILE = os.path.join(xdg.BaseDirectory.xdg_cache_home, 'popcon', 'debian') # implements BASEDIRSPEC
 RESULTS_URL = "http://popcon.debian.org/all-popcon-results.txt.gz"
 
 def _fetch():
@@ -122,6 +125,8 @@ def package_raw(*packages):
     except:
         data = _fetch()
         data = _parse(data)
+        if not os.path.isdir(os.path.dirname(DUMPFILE)): # i still think that makedirs should behave like mkdir -p
+            os.makedirs(os.path.dirname(DUMPFILE), mode=0700) # mode according to BASEDIRSPEC
         handle = open(DUMPFILE, 'w')
         timestamp = time.time()
         pickle.dump((timestamp, data), handle)
