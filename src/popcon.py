@@ -32,7 +32,7 @@ The raw data (vote, old, recent, no-file) is also available, the sum of the raw
 numbers is the number of installations as reported by `popcon.package`.
 
     >>> popcon.package_raw('reportbug-ng', 'reportbug')
-    {'reportbug-ng': [50, 187, 86, 0], 'reportbug': [5279, 59652, 10118, 16]}
+    {'reportbug-ng': Package(vote=50, old=187, recent=86, no_files=0), 'reportbug': Package(vote=5279, old=59652, recent=10118, no_files=16)}
 
 Behind the scences popcon will try to use cached infomation saved in
 `DUMPFILE`. If that file is not available, or older than `EXPIRY` seconds
@@ -48,6 +48,12 @@ import gzip
 import StringIO
 import cPickle as pickle
 import os
+import collections
+
+try:
+    Package = collections.namedtuple("Package", ["vote", "old", "recent", "no_files"])
+except AttributeError:
+    Package = lambda *args: tuple(args)
 
 # week in seconds
 EXPIRY = 86400 * 7
@@ -71,7 +77,7 @@ def _parse(results):
         elems = line.split()
         if elems[0] != "Package:":
             continue
-        ans[elems[1]] = [int(i) for i in elems[2:]]
+        ans[elems[1]] = Package(*(int(i) for i in elems[2:]))
     return ans
 
 def _decompress(compressed):
@@ -98,7 +104,7 @@ def package_raw(*packages):
     """Return the raw popcon values for the given packages.
 
     The return value is a dict where the keys are the packages and the values a
-    list of integers: [vote, old, recent, no-files]
+    named tuple of integers: (vote, old, recent, no-files)
 
         vote: number of people who use this package regulary
         old: is the number of people who installed, but don't use this package 
