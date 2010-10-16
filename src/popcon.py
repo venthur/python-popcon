@@ -44,6 +44,7 @@ Behind the scences popcon will try to use cached infomation saved in
 __author__ = 'Bastian Venthur <venthur@debian.org>'
 
 
+import warnings
 import time
 import urllib2
 import gzip
@@ -116,20 +117,23 @@ def package_raw(*packages):
         no-files: is the number of people whose entry didn't contain enough 
                   information (atime and ctime were 0)
     """
-    try:
-        handle = open(DUMPFILE, 'r')
-        (timestamp, data) = pickle.load(handle)
-        handle.close()
-        if (timestamp + EXPIRY) < time.time():
-            raise
-    except:
+    data = None
+    earliest_possible_mtime = max(time.time() - EXPIRY, os.stat(__file__).st_mtime)
+    if os.path.exists(DUMPFILE) and os.stat(DUMPFILE).st_mtime > earliest_possible_mtime:
+        try:
+            handle = open(DUMPFILE, 'r')
+            data = pickle.load(handle)
+            handle.close()
+        except:
+            warnings.warn("Problems loading cache file: %s"%e)
+
+    if data is None:
         data = _fetch()
         data = _parse(data)
         if not os.path.isdir(os.path.dirname(DUMPFILE)): # i still think that makedirs should behave like mkdir -p
             os.makedirs(os.path.dirname(DUMPFILE), mode=0700) # mode according to BASEDIRSPEC
         handle = open(DUMPFILE, 'w')
-        timestamp = time.time()
-        pickle.dump((timestamp, data), handle)
+        pickle.dump(data, handle)
         handle.close()
     ans = dict()
     for pkg in packages:
