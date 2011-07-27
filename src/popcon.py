@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # popcon.py -
-# Copyright (C) 2010  Bastian Venthur
+# Copyright (C) 2010-2011  Bastian Venthur
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -55,6 +55,7 @@ import tempfile
 import cPickle as pickle
 import os
 import collections
+
 import xdg.BaseDirectory
 
 try:
@@ -145,7 +146,9 @@ def package_raw(*packages):
         data = _parse(data)
         if not os.path.isdir(os.path.dirname(DUMPFILE)): # i still think that makedirs should behave like mkdir -p
             os.makedirs(os.path.dirname(DUMPFILE), mode=0700) # mode according to BASEDIRSPEC
-        # as soon as python2.6 is in stable, we can use delete=False here and replace the flush/rename/try:close sequence with the cleaner close/rename.
+        # as soon as python2.6 is in stable, we can use delete=False here and
+        # replace the flush/rename/try:close sequence with the cleaner
+        # close/rename.
         temp = tempfile.NamedTemporaryFile(dir=os.path.dirname(DUMPFILE))
         pickle.dump(data, temp)
         temp.flush()
