@@ -2,7 +2,7 @@ Source: python-popcon
 Priority: extra
 Maintainer: Bastian Venthur <venthur@debian.org>
 Build-Depends: debhelper (>= 7.0.50~), python-support
-Standards-Version: 3.9.1
+Standards-Version: 3.9.2
 Section: python
 Vcs-Git: git://github.com/venthur/python-popcon.git
 Vcs-Browser: http://github.com/venthur/python-popcon
