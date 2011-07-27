@@ -9,7 +9,7 @@ Vcs-Browser: http://github.com/venthur/python-popcon
 
 Package: python-popcon
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, python-xdg
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-xdg
 Description: Python interface to Debian's Popularity Contest (popcon)
  This package provides the popcon module, which allows to query Debian's
  Popularity Contest data.

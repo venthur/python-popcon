@@ -1,3 +1,17 @@
+python-popcon (1.1) unstable; urgency=low
+
+  * Added patches by chrysn:
+    - use namedtuple in python version that support it
+    - use XDG_CACHE_HOME instead of ~/.popcon-cache
+    - filebased timestamping
+    - modernize deprecated use of has_key
+    - module level data caching
+    - atomic file creation
+
+  * Add ${python:Depends} to Depends (closes: #627694).
+
+ -- Bastian Venthur <venthur@debian.org>  Thu, 28 Jul 2011 00:15:35 +0200
+
 python-popcon (1.0) unstable; urgency=low
 
   * Initial Release.
