@@ -20,6 +20,7 @@
 # relevant specifications:
 # * BASEDIRSPEC: http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html
 
+
 """Get Debian popcon values for given packages.
 
 The usage of this module is easy:
@@ -30,20 +31,24 @@ The usage of this module is easy:
     >>> popcon.package('reportbug-ng', 'reportbug')
     {'reportbug-ng': 323, 'reportbug': 75065}
 
-The raw data (vote, old, recent, no-file) is also available, the sum of the raw
-numbers is the number of installations as reported by `popcon.package`.
+The raw data (vote, old, recent, no-file) is also available, the sum of
+the raw numbers is the number of installations as reported by
+`popcon.package`.
 
     >>> popcon.package_raw('reportbug-ng', 'reportbug')
-    {'reportbug-ng': Package(vote=50, old=187, recent=86, no_files=0), 'reportbug': Package(vote=5279, old=59652, recent=10118, no_files=16)}
+    {'reportbug-ng': Package(vote=50, old=187, recent=86, no_files=0),
+            'reportbug': Package(vote=5279, old=59652, recent=10118,
+            no_files=16)}
 
 Behind the scences popcon will try to use cached infomation saved in
-`DUMPFILE`. If that file is not available, or older than `EXPIRY` seconds
-(default is 7 days) it will download fresh data and save that into `DUMPFILE`.
+`DUMPFILE`. If that file is not available, or older than `EXPIRY`
+seconds (default is 7 days) it will download fresh data and save that
+into `DUMPFILE`.
 
-The cached data will be kept in memory unless `KEEP_DATA` is set to False.
+The cached data will be kept in memory unless `KEEP_DATA` is set to
+False.
+
 """
-
-__author__ = 'Bastian Venthur <venthur@debian.org>'
 
 
 import warnings
@@ -58,18 +63,27 @@ import collections
 
 import xdg.BaseDirectory
 
+
+__author__ = 'Bastian Venthur <venthur@debian.org>'
+
+
 try:
-    Package = collections.namedtuple("Package", ["vote", "old", "recent", "no_files"])
+    Package = collections.namedtuple(
+        "Package", ["vote", "old", "recent", "no_files"])
 except AttributeError:
     Package = lambda *args: tuple(args)
 
 # week in seconds
 EXPIRY = 86400 * 7
-DUMPFILE = os.path.join(xdg.BaseDirectory.xdg_cache_home, 'popcon', 'debian') # implements BASEDIRSPEC
+DUMPFILE = os.path.join(
+    xdg.BaseDirectory.xdg_cache_home,
+     'popcon',
+     'debian')  # implements BASEDIRSPEC
 RESULTS_URL = "http://popcon.debian.org/all-popcon-results.txt.gz"
 KEEP_DATA = True
 cached_data = None
 cached_timestamp = None
+
 
 def _fetch():
     """Fetch all popcon results and return unparsed data."""
@@ -79,6 +93,7 @@ def _fetch():
     response.close()
     txt = _decompress(txt)
     return txt
+
 
 def _parse(results):
     """Parse all-popcon-results file."""
@@ -91,12 +106,14 @@ def _parse(results):
         ans[elems[1]] = Package(*(int(i) for i in elems[2:]))
     return ans
 
+
 def _decompress(compressed):
     """Decompress a gzipped string."""
     gzippedstream = StringIO.StringIO(compressed)
     gzipper = gzip.GzipFile(fileobj=gzippedstream)
     data = gzipper.read()
     return data
+
 
 def package(*packages):
     """Return the number of installations.
@@ -111,6 +128,7 @@ def package(*packages):
         ans[pkg] = sum(values)
     return ans
 
+
 def package_raw(*packages):
     """Return the raw popcon values for the given packages.
 
@@ -118,15 +136,17 @@ def package_raw(*packages):
     named tuple of integers: (vote, old, recent, no-files)
 
         vote: number of people who use this package regulary
-        old: is the number of people who installed, but don't use this package 
+        old: is the number of people who installed, but don't use this package
              regularly
         recent: is the number of people who upgraded this package recently
-        no-files: is the number of people whose entry didn't contain enough 
+        no-files: is the number of people whose entry didn't contain enough
                   information (atime and ctime were 0)
     """
     global cached_data, cached_timestamp
 
-    earliest_possible_mtime = max(time.time() - EXPIRY, os.stat(__file__).st_mtime)
+    earliest_possible_mtime = max(
+        time.time() - EXPIRY,
+        os.stat(__file__).st_mtime)
 
     if cached_data is not None and cached_timestamp <= earliest_possible_mtime:
         cached_data = None
@@ -139,13 +159,15 @@ def package_raw(*packages):
             handle.close()
             cached_timestamp = os.stat(DUMPFILE).st_mtime
         except:
-            warnings.warn("Problems loading cache file: %s"%e)
+            warnings.warn("Problems loading cache file: %s" % e)
 
     if data is None:
         data = _fetch()
         data = _parse(data)
-        if not os.path.isdir(os.path.dirname(DUMPFILE)): # i still think that makedirs should behave like mkdir -p
-            os.makedirs(os.path.dirname(DUMPFILE), mode=0700) # mode according to BASEDIRSPEC
+        if not os.path.isdir(os.path.dirname(DUMPFILE)):  # i still think that makedirs should behave like mkdir -p
+            os.makedirs(
+                os.path.dirname(DUMPFILE),
+                mode=0o700)  # mode according to BASEDIRSPEC
         # as soon as python2.6 is in stable, we can use delete=False here and
         # replace the flush/rename/try:close sequence with the cleaner
         # close/rename.
@@ -165,4 +187,3 @@ def package_raw(*packages):
     if KEEP_DATA:
         cached_data = data
     return ans
-
