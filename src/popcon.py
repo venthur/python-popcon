@@ -162,7 +162,7 @@ def package_raw(*packages):
             handle.close()
             cached_timestamp = os.stat(DUMPFILE).st_mtime
         except:
-            warnings.warn("Problems loading cache file: %s" % e)
+            warnings.warn("Problems loading cache file: %s" % DUMPFILE)
 
     if data is None:
         data = _fetch()
