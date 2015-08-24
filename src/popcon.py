@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # popcon.py -
-# Copyright (C) 2010-2011  Bastian Venthur
+# Copyright (C) 2010-2015  Bastian Venthur
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -50,14 +50,30 @@ False.
 
 """
 
+from __future__ import division, print_function
 
 import warnings
 import time
-import urllib2
+try:
+    # python2
+    from urllib2 import Request, urlopen
+except ImportError:
+    # python3
+    from urllib.request import Request, urlopen
 import gzip
-import StringIO
+try:
+    # python2
+    import StringIO as io
+except ImportError:
+    # python3
+    import io
 import tempfile
-import cPickle as pickle
+try:
+    # python2
+    import cPickle as pickle
+except ImportError:
+    # python3
+    import pickle
 import os
 import collections
 
@@ -85,8 +101,8 @@ cached_timestamp = None
 
 def _fetch():
     """Fetch all popcon results and return unparsed data."""
-    request = urllib2.Request(RESULTS_URL)
-    response = urllib2.urlopen(request)
+    request = Request(RESULTS_URL)
+    response = urlopen(request)
     txt = response.read()
     response.close()
     txt = _decompress(txt)
@@ -107,9 +123,15 @@ def _parse(results):
 
 def _decompress(compressed):
     """Decompress a gzipped string."""
-    gzippedstream = StringIO.StringIO(compressed)
+    try:
+        # python2
+        gzippedstream = io.StringIO(compressed)
+    except TypeError:
+        # python3
+        gzippedstream = io.BytesIO(compressed)
     gzipper = gzip.GzipFile(fileobj=gzippedstream)
     data = gzipper.read()
+    data = data.decode()
     return data
 
 
@@ -122,7 +144,7 @@ def package(*packages):
     """
     raw = package_raw(*packages)
     ans = dict()
-    for pkg, values in raw.iteritems():
+    for pkg, values in list(raw.items()):
         ans[pkg] = sum(values)
     return ans
 
@@ -157,9 +179,8 @@ def package_raw(*packages):
     data = cached_data
     if data is None and os.path.exists(DUMPFILE) and os.stat(DUMPFILE).st_mtime > earliest_possible_mtime:
         try:
-            handle = open(DUMPFILE, 'r')
-            data = pickle.load(handle)
-            handle.close()
+            with open(DUMPFILE, 'rb') as fh:
+                data = pickle.load(fh)
             cached_timestamp = os.stat(DUMPFILE).st_mtime
         except:
             warnings.warn("Problems loading cache file: %s" % DUMPFILE)
@@ -190,3 +211,8 @@ def package_raw(*packages):
     if KEEP_DATA:
         cached_data = data
     return ans
+
+
+if __name__ ==  "__main__":
+    print(package('reportbug-ng'))
+    print(package('reportbug-ng', 'reportbug'))
