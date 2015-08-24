@@ -3,7 +3,7 @@
 from distutils.core import setup
 
 setup(name='python-popcon',
-        version='1.0',
+        version='1.3',
         description="Python inteface to Debian's popcon database",
         author='Bastian Venthur',
         author_email='venthur@debian.org',
