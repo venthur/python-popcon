@@ -1,15 +1,15 @@
 Source: python-popcon
 Priority: extra
 Maintainer: Bastian Venthur <venthur@debian.org>
-Build-Depends: debhelper (>= 7.0.50~), python-support
-Standards-Version: 3.9.2
+Build-Depends: debhelper (>= 7.0.50~), dh-python, python
+Standards-Version: 3.9.6
 Section: python
 Vcs-Git: git://github.com/venthur/python-popcon.git
 Vcs-Browser: http://github.com/venthur/python-popcon
 
 Package: python-popcon
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-xdg
+Depends: ${misc:Depends}, ${python:Depends}, python-xdg
 Description: Python interface to Debian's Popularity Contest (popcon)
  This package provides the popcon module, which allows to query Debian's
  Popularity Contest data.

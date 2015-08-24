@@ -1,3 +1,18 @@
+python-popcon (1.2) unstable; urgency=medium
+
+  * Fix previous NMU "FTBFS: Missing Build-Depends on python"
+    (Closes: #796649)
+  * Bumped standards version
+
+ -- Bastian Venthur <venthur@debian.org>  Mon, 24 Aug 2015 08:43:08 +0200
+
+python-popcon (1.1+nmu1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Build using dh-python. Closes: #786119.
+
+ -- Matthias Klose <doko@debian.org>  Sat, 22 Aug 2015 10:16:05 +0200
+
 python-popcon (1.1) unstable; urgency=low
 
   * Added patches by chrysn:
