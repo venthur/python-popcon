@@ -118,9 +118,9 @@ def _decompress(compressed):
 def package(*packages):
     """Return the number of installations.
 
-    The return value is a dict where the keys are the packages and the values
-    the number of installations. If a package was not found it is not in the
-    dict.
+    The return value is a dict where the keys are the packages and the
+    values the number of installations. If a package was not found it is
+    not in the dict.
     """
     raw = package_raw(*packages)
     ans = dict()
@@ -132,15 +132,20 @@ def package(*packages):
 def package_raw(*packages):
     """Return the raw popcon values for the given packages.
 
-    The return value is a dict where the keys are the packages and the values a
-    named tuple of integers: (vote, old, recent, no-files)
+    The return value is a dict where the keys are the packages and the
+    values a named tuple of integers: (vote, old, recent, no-files)
 
         vote: number of people who use this package regulary
-        old: is the number of people who installed, but don't use this package
-             regularly
-        recent: is the number of people who upgraded this package recently
-        no-files: is the number of people whose entry didn't contain enough
-                  information (atime and ctime were 0)
+
+        old: is the number of people who installed, but don't use this
+            package regularly
+
+        recent: is the number of people who upgraded this package
+            recently
+
+        no-files: is the number of people whose entry didn't contain
+            enough information (atime and ctime were 0)
+
     """
     global cached_data, cached_timestamp
 
@@ -168,9 +173,9 @@ def package_raw(*packages):
             os.makedirs(
                 os.path.dirname(DUMPFILE),
                 mode=0o700)  # mode according to BASEDIRSPEC
-        # as soon as python2.6 is in stable, we can use delete=False here and
-        # replace the flush/rename/try:close sequence with the cleaner
-        # close/rename.
+        # as soon as python2.6 is in stable, we can use delete=False
+        # here and replace the flush/rename/try:close sequence with the
+        # cleaner close/rename.
         temp = tempfile.NamedTemporaryFile(dir=os.path.dirname(DUMPFILE))
         pickle.dump(data, temp)
         temp.flush()
