@@ -67,11 +67,9 @@ import xdg.BaseDirectory
 __author__ = 'Bastian Venthur <venthur@debian.org>'
 
 
-try:
-    Package = collections.namedtuple(
-        "Package", ["vote", "old", "recent", "no_files"])
-except AttributeError:
-    Package = lambda *args: tuple(args)
+Package = collections.namedtuple(
+    "Package", ["vote", "old", "recent", "no_files"])
+
 
 # week in seconds
 EXPIRY = 86400 * 7
