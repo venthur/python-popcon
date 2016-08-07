@@ -18,7 +18,7 @@ Description: Python interface to Debian's Popularity Contest (popcon)
 
 Package: python3-popcon
 Architecture: all
-Depends: ${misc:Depends}, ${python3:Depends}, python-xdg
+Depends: ${misc:Depends}, ${python3:Depends}, python3-xdg
 Description: Python interface to Debian's Popularity Contest (popcon)
  This package provides the popcon module, which allows to query Debian's
  Popularity Contest data.
