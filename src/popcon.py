@@ -110,7 +110,7 @@ def _parse(results):
     results = results.splitlines()
     for line in results:
         elems = line.split()
-        if elems[0] != "Package:":
+        if elems[0] != b"Package:":
             continue
         ans[elems[1]] = Package(*(int(i) for i in elems[2:]))
     return ans
@@ -143,7 +143,6 @@ def _decompress(compressed):
         gzippedstream = io.BytesIO(compressed)
     gzipper = gzip.GzipFile(fileobj=gzippedstream)
     data = gzipper.read()
-    data = data.decode()
     return data
 
 
@@ -258,8 +257,11 @@ def _package_raw_generic(url, parse, key, *packages):
         cached_timestamp[key] = time.time()
     ans = dict()
     for pkg in packages:
-        if pkg in data:
-            ans[pkg] = data[pkg]
+        # Lookup using bytestrings, but always index results by the original so
+        # that callsites can look it up.
+        lookup = pkg if isinstance(pkg, bytes) else pkg.encode('utf-8')
+        if lookup in data:
+            ans[pkg] = data[lookup]
     if KEEP_DATA:
         cached_data[key] = data
     return ans
