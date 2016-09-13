@@ -125,7 +125,7 @@ def _parse_stats(results):
         try:
             int(elems[0])
             int(elems[2]) # e.g. skip pass the "not in sid" pseudo-package
-            if elems[1] == "Total":
+            if elems[1] == b"Total":
                 continue
         except:
             continue
@@ -218,7 +218,7 @@ def _package_raw_generic(url, parse, key, *packages):
     dumpfile = os.path.join(
         xdg.BaseDirectory.xdg_cache_home,
         'popcon',
-        key) # implements BASEDIRSPEC
+        "%s.%s" % (key, pickle.format_version)) # implements BASEDIRSPEC
 
     earliest_possible_mtime = max(
         time.time() - EXPIRY,
@@ -234,7 +234,9 @@ def _package_raw_generic(url, parse, key, *packages):
                 data = pickle.load(fh)
             cached_timestamp[key] = os.stat(dumpfile).st_mtime
         except:
+            import traceback
             warnings.warn("Problems loading cache file: %s" % dumpfile)
+            traceback.print_exc()
 
     if data is None:
         data = _fetch(url)
