@@ -1,3 +1,10 @@
+python-popcon (1.3+nmu1) UNRELEASED; urgency=medium
+
+  * Non-maintainer upload.
+  * Add support for querying sourcemax statistics.
+
+ -- Ximin Luo <infinity0@debian.org>  Tue, 13 Sep 2016 19:11:38 +0200
+
 python-popcon (1.3) unstable; urgency=medium
 
   * Provide Python3 module
