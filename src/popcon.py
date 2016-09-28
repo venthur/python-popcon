@@ -142,7 +142,20 @@ def _parse(results):
 
 
 def _parse_stats(results):
-    """Parse "statistics" files."""
+    """Parse "statistics" files.
+
+    Parameters
+    ----------
+    results : str
+        the results file
+
+    Returns
+    -------
+    ans : dict
+        package name -> `Package` namedtuple mapping, containing the
+        package information
+
+    """
     ans = dict()
     results = results.splitlines()
     for line in results:
