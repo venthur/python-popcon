@@ -40,8 +40,8 @@ the raw numbers is the number of installations as reported by
             'reportbug': Package(vote=5279, old=59652, recent=10118,
             no_files=16)}
 
-Behind the scences popcon will try to use cached infomation saved in
-a file in the ~/.cache/popcon directory. If the relevant file is not
+Behind the scences popcon will try to use cached infomation saved in a
+file in the ~/.cache/popcon directory. If the relevant file is not
 available, or older than `EXPIRY` seconds (default is 7 days) it will
 download fresh data and save that.
 
@@ -162,7 +162,7 @@ def _parse_stats(results):
         elems = line.split()
         try:
             int(elems[0])
-            int(elems[2]) # e.g. skip pass the "not in sid" pseudo-package
+            int(elems[2])  # e.g. skip pass the "not in sid" pseudo-package
             if elems[1] == b"Total":
                 continue
         except:
@@ -322,7 +322,7 @@ def _package_raw_generic(url, parse, key, *packages):
     dumpfile = os.path.join(
         xdg.BaseDirectory.xdg_cache_home,
         'popcon',
-        "%s.%s" % (key, pickle.format_version)) # implements BASEDIRSPEC
+        "%s.%s" % (key, pickle.format_version))  # implements BASEDIRSPEC
 
     earliest_possible_mtime = max(
         time.time() - EXPIRY,
