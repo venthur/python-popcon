@@ -41,9 +41,9 @@ the raw numbers is the number of installations as reported by
             no_files=16)}
 
 Behind the scences popcon will try to use cached infomation saved in
-`DUMPFILE`. If that file is not available, or older than `EXPIRY`
-seconds (default is 7 days) it will download fresh data and save that
-into `DUMPFILE`.
+a file in the ~/.cache/popcon directory. If the relevant file is not
+available, or older than `EXPIRY` seconds (default is 7 days) it will
+download fresh data and save that.
 
 The cached data will be kept in memory unless `KEEP_DATA` is set to
 False.
@@ -89,19 +89,14 @@ Package = collections.namedtuple(
 
 # week in seconds
 EXPIRY = 86400 * 7
-DUMPFILE = os.path.join(
-    xdg.BaseDirectory.xdg_cache_home,
-     'popcon',
-     'debian')  # implements BASEDIRSPEC
-RESULTS_URL = "http://popcon.debian.org/all-popcon-results.txt.gz"
 KEEP_DATA = True
-cached_data = None
-cached_timestamp = None
+cached_data = {}
+cached_timestamp = {}
 
 
-def _fetch():
+def _fetch(url):
     """Fetch all popcon results and return unparsed data."""
-    request = Request(RESULTS_URL)
+    request = Request(url)
     response = urlopen(request)
     txt = response.read()
     response.close()
@@ -115,9 +110,26 @@ def _parse(results):
     results = results.splitlines()
     for line in results:
         elems = line.split()
-        if elems[0] != "Package:":
+        if elems[0] != b"Package:":
             continue
         ans[elems[1]] = Package(*(int(i) for i in elems[2:]))
+    return ans
+
+
+def _parse_stats(results):
+    """Parse "statistics" files."""
+    ans = dict()
+    results = results.splitlines()
+    for line in results:
+        elems = line.split()
+        try:
+            int(elems[0])
+            int(elems[2]) # e.g. skip pass the "not in sid" pseudo-package
+            if elems[1] == b"Total":
+                continue
+        except:
+            continue
+        ans[elems[1]] = Package(*(int(i) for i in elems[3:]))
     return ans
 
 
@@ -131,7 +143,6 @@ def _decompress(compressed):
         gzippedstream = io.BytesIO(compressed)
     gzipper = gzip.GzipFile(fileobj=gzippedstream)
     data = gzipper.read()
-    data = data.decode()
     return data
 
 
@@ -143,6 +154,22 @@ def package(*packages):
     not in the dict.
     """
     raw = package_raw(*packages)
+    ans = dict()
+    for pkg, values in list(raw.items()):
+        ans[pkg] = sum(values)
+    return ans
+
+
+def source_package(*packages):
+    """Return the number of installations, for source packages.
+
+    See `package` for the format of the returned data.
+
+    At present, this is only an approximation that instead gives the
+    maximum value, out of the number of installations of any binary
+    package belonging to each source package.
+    """
+    raw = source_package_raw(*packages)
     ans = dict()
     for pkg, values in list(raw.items()):
         ans[pkg] = sum(values)
@@ -167,49 +194,78 @@ def package_raw(*packages):
             enough information (atime and ctime were 0)
 
     """
+    return _package_raw_generic(
+        "http://popcon.debian.org/all-popcon-results.txt.gz",
+        _parse, "debian", *packages)
+
+
+def source_package_raw(*packages):
+    """Return the raw popcon values for the given source packages.
+
+    See `package_raw` for the format of the returned data.
+
+    At present, this is only an approximation that instead gives the
+    maximum value, out of the number of installations of any binary
+    package belonging to each source package.
+    """
+    return _package_raw_generic(
+        "http://popcon.debian.org/sourcemax/by_inst.gz",
+        _parse_stats, "debian-sourcemax", *packages)
+
+
+def _package_raw_generic(url, parse, key, *packages):
     global cached_data, cached_timestamp
+    dumpfile = os.path.join(
+        xdg.BaseDirectory.xdg_cache_home,
+        'popcon',
+        "%s.%s" % (key, pickle.format_version)) # implements BASEDIRSPEC
 
     earliest_possible_mtime = max(
         time.time() - EXPIRY,
         os.stat(__file__).st_mtime)
 
-    if cached_data is not None and cached_timestamp <= earliest_possible_mtime:
-        cached_data = None
+    if key in cached_data and cached_timestamp.get(key, 0) <= earliest_possible_mtime:
+        del cached_data[key]
 
-    data = cached_data
-    if data is None and os.path.exists(DUMPFILE) and os.stat(DUMPFILE).st_mtime > earliest_possible_mtime:
+    data = cached_data.get(key, None)
+    if data is None and os.path.exists(dumpfile) and os.stat(dumpfile).st_mtime > earliest_possible_mtime:
         try:
-            with open(DUMPFILE, 'rb') as fh:
+            with open(dumpfile, 'rb') as fh:
                 data = pickle.load(fh)
-            cached_timestamp = os.stat(DUMPFILE).st_mtime
+            cached_timestamp[key] = os.stat(dumpfile).st_mtime
         except:
-            warnings.warn("Problems loading cache file: %s" % DUMPFILE)
+            import traceback
+            warnings.warn("Problems loading cache file: %s" % dumpfile)
+            traceback.print_exc()
 
     if data is None:
-        data = _fetch()
-        data = _parse(data)
-        if not os.path.isdir(os.path.dirname(DUMPFILE)):  # i still think that makedirs should behave like mkdir -p
+        data = _fetch(url)
+        data = parse(data)
+        if not os.path.isdir(os.path.dirname(dumpfile)):  # i still think that makedirs should behave like mkdir -p
             os.makedirs(
-                os.path.dirname(DUMPFILE),
+                os.path.dirname(dumpfile),
                 mode=0o700)  # mode according to BASEDIRSPEC
         # as soon as python2.6 is in stable, we can use delete=False
         # here and replace the flush/rename/try:close sequence with the
         # cleaner close/rename.
-        temp = tempfile.NamedTemporaryFile(dir=os.path.dirname(DUMPFILE))
+        temp = tempfile.NamedTemporaryFile(dir=os.path.dirname(dumpfile))
         pickle.dump(data, temp)
         temp.flush()
-        os.rename(temp.name, DUMPFILE)
+        os.rename(temp.name, dumpfile)
         try:
             temp.close()
         except OSError:
             pass
-        cached_timestamp = time.time()
+        cached_timestamp[key] = time.time()
     ans = dict()
     for pkg in packages:
-        if pkg in data:
-            ans[pkg] = data[pkg]
+        # Lookup using bytestrings, but always index results by the original so
+        # that callsites can look it up.
+        lookup = pkg if isinstance(pkg, bytes) else pkg.encode('utf-8')
+        if lookup in data:
+            ans[pkg] = data[lookup]
     if KEEP_DATA:
-        cached_data = data
+        cached_data[key] = data
     return ans
 
 
