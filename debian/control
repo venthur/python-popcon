@@ -1,7 +1,7 @@
 Source: python-popcon
 Priority: extra
 Maintainer: Bastian Venthur <venthur@debian.org>
-Build-Depends: debhelper (>= 9), dh-python, python, python3
+Build-Depends: debhelper (>= 9), dh-python, python, python3, python-xdg, python3-xdg
 Standards-Version: 3.9.8
 Section: python
 X-Python-Version: >= 2.6
