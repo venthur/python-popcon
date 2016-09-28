@@ -95,7 +95,19 @@ cached_timestamp = {}
 
 
 def _fetch(url):
-    """Fetch all popcon results and return unparsed data."""
+    """Fetch all popcon results and return unparsed data.
+
+    Parameters
+    ----------
+    url : str
+        the url of the gzipped popcon results
+
+    Returns
+    -------
+    txt : str
+        the uncompressed data
+
+    """
     request = Request(url)
     response = urlopen(request)
     txt = response.read()
@@ -105,7 +117,20 @@ def _fetch(url):
 
 
 def _parse(results):
-    """Parse all-popcon-results file."""
+    """Parse all-popcon-results file.
+
+    Parameters
+    ----------
+    results : str
+        the results file
+
+    Returns
+    -------
+    ans : dict
+        package name -> `Package` namedtuple mapping, containing the
+        package information
+
+    """
     ans = dict()
     results = results.splitlines()
     for line in results:
@@ -134,7 +159,19 @@ def _parse_stats(results):
 
 
 def _decompress(compressed):
-    """Decompress a gzipped string."""
+    """Decompress a gzipped string.
+
+    Parameters
+    ----------
+    compressed : str
+        the compressed string
+
+    Returns
+    -------
+    data : str
+        the uncompressed string
+
+    """
     try:
         # python2
         gzippedstream = io.StringIO(compressed)
@@ -152,6 +189,17 @@ def package(*packages):
     The return value is a dict where the keys are the packages and the
     values the number of installations. If a package was not found it is
     not in the dict.
+
+    Parameters
+    ----------
+    packages : tuple of strings
+        the package names
+
+    Returns
+    -------
+    ans : dict
+        packagename -> number of installations mapping
+
     """
     raw = package_raw(*packages)
     ans = dict()
@@ -168,6 +216,17 @@ def source_package(*packages):
     At present, this is only an approximation that instead gives the
     maximum value, out of the number of installations of any binary
     package belonging to each source package.
+
+    Parameters
+    ----------
+    packages : tuple of strings
+        the package names
+
+    Returns
+    -------
+    ans : dict
+        packagename -> number of installations mapping
+
     """
     raw = source_package_raw(*packages)
     ans = dict()
@@ -182,16 +241,21 @@ def package_raw(*packages):
     The return value is a dict where the keys are the packages and the
     values a named tuple of integers: (vote, old, recent, no-files)
 
-        vote: number of people who use this package regulary
+    * vote: number of people who use this package regulary
+    * old: is the number of people who installed, but don't use this
+      package regularly
+    * recent: is the number of people who upgraded this package recently
+    * no-files: is the number of people whose entry didn't contain
+      enough information (atime and ctime were 0)
 
-        old: is the number of people who installed, but don't use this
-            package regularly
+    Parameters
+    ----------
+    packages : tuple of strings
+        the package names
 
-        recent: is the number of people who upgraded this package
-            recently
-
-        no-files: is the number of people whose entry didn't contain
-            enough information (atime and ctime were 0)
+    Returns
+    -------
+    ans : dict
 
     """
     return _package_raw_generic(
@@ -207,6 +271,15 @@ def source_package_raw(*packages):
     At present, this is only an approximation that instead gives the
     maximum value, out of the number of installations of any binary
     package belonging to each source package.
+
+    Parameters
+    ----------
+    packages : tuple of strings
+
+    Returns
+    -------
+    ans : dict
+
     """
     return _package_raw_generic(
         "http://popcon.debian.org/sourcemax/by_inst.gz",
@@ -214,6 +287,24 @@ def source_package_raw(*packages):
 
 
 def _package_raw_generic(url, parse, key, *packages):
+    """The work mule
+
+    Parameters
+    ----------
+    url : str
+        the url to use
+    parse : function
+        the parser function
+    key : str
+        "debian-sourcemax" or "debian"
+    packages : tuple of strings
+        the debian package names
+
+    Returns
+    -------
+    ans : dict
+
+    """
     global cached_data, cached_timestamp
     dumpfile = os.path.join(
         xdg.BaseDirectory.xdg_cache_home,
