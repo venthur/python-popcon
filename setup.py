@@ -1,13 +1,10 @@
-import sys
 from setuptools import setup
 
-sys.path.insert(0, 'src')
-
-import popcon
+exec(open('./popcon/version.py').read())
 
 
 setup(name='python-popcon',
-    version=popcon.__version__,
+    version=__version__,
     description="Python inteface to Debian's popcon database",
     author='Bastian Venthur',
     author_email='venthur@debian.org',

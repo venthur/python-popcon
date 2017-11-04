@@ -81,7 +81,6 @@ import xdg.BaseDirectory
 
 
 __author__ = 'Bastian Venthur <venthur@debian.org>'
-__version__ = '1.4'
 
 Package = collections.namedtuple(
     "Package", ["vote", "old", "recent", "no_files"])
