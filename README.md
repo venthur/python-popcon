@@ -1,6 +1,7 @@
 # python-popcon
 
-Get Debian popcon values for given packages.
+Get Debian [popularity contest](https://popcon.debian.org/) values for given
+packages.
 
 This package supports Python2 and Python3
 
