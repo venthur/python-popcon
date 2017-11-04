@@ -78,7 +78,7 @@ import collections
 
 
 XDG_CACHE_HOME = os.environ.get('XDG_CACHE_HOME',
-                                os.path.expandvers('$HOME/.cache'))
+                                os.path.expandvars('$HOME/.cache'))
 
 __author__ = 'Bastian Venthur <venthur@debian.org>'
 
