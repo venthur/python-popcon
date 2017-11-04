@@ -14,4 +14,9 @@ setup(
     license='GPL2',
     packages=['popcon'],
     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, <4',
+    entry_points={
+        'console_scripts': [
+            'popcon = popcon.__main__:main'
+        ]
+    },
 )
