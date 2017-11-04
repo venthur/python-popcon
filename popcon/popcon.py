@@ -76,8 +76,9 @@ except ImportError:
 import os
 import collections
 
-import xdg.BaseDirectory
 
+XDG_CACHE_HOME = os.environ.get('XDG_CACHE_HOME',
+                                os.path.expandvers('$HOME/.cache'))
 
 __author__ = 'Bastian Venthur <venthur@debian.org>'
 
@@ -318,7 +319,7 @@ def _package_raw_generic(url, parse, key, *packages):
     """
     global cached_data, cached_timestamp
     dumpfile = os.path.join(
-        xdg.BaseDirectory.xdg_cache_home,
+        XDG_CACHE_HOME,
         'popcon',
         "%s.%s" % (key, pickle.format_version))  # implements BASEDIRSPEC
 
