@@ -14,4 +14,4 @@ install:
 
 script:
   - nosetests
-    #- debianbts
+  - popcon reportbug
