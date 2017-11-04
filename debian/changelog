@@ -1,3 +1,14 @@
+python-popcon (1.5.0) unstable; urgency=medium
+
+  * Updated packaging (setup.py, etc)
+  * Added popcon CLI for direct queries from the command line
+  * Removed dependency from xdg
+  * Added Travis CI
+  * Added unit tests
+  * Added changelog, license, readme
+
+ -- Bastian Venthur <venthur@debian.org>  Sat, 04 Nov 2017 16:22:01 +0100
+
 python-popcon (1.4) unstable; urgency=medium
 
   * Acknowledge NMU, thanks Chris Lamb and Ximin Luo!

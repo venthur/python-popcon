@@ -40,13 +40,12 @@ the raw numbers is the number of installations as reported by
             'reportbug': Package(vote=5279, old=59652, recent=10118,
             no_files=16)}
 
-Behind the scences popcon will try to use cached infomation saved in a
-file in the ~/.cache/popcon directory. If the relevant file is not
-available, or older than `EXPIRY` seconds (default is 7 days) it will
-download fresh data and save that.
+Behind the scene popcon will try to use cached information saved in a file in
+the ~/.cache/popcon directory. If the relevant file is not available, or older
+than `EXPIRY` seconds (default is 7 days) it will download fresh data and save
+that.
 
-The cached data will be kept in memory unless `KEEP_DATA` is set to
-False.
+The cached data will be kept in memory unless `KEEP_DATA` is set to False.
 
 """
 
@@ -77,11 +76,11 @@ except ImportError:
 import os
 import collections
 
-import xdg.BaseDirectory
 
+XDG_CACHE_HOME = os.environ.get('XDG_CACHE_HOME',
+                                os.path.expandvars('$HOME/.cache'))
 
 __author__ = 'Bastian Venthur <venthur@debian.org>'
-__version__ = '1.4'
 
 Package = collections.namedtuple(
     "Package", ["vote", "old", "recent", "no_files"])
@@ -320,7 +319,7 @@ def _package_raw_generic(url, parse, key, *packages):
     """
     global cached_data, cached_timestamp
     dumpfile = os.path.join(
-        xdg.BaseDirectory.xdg_cache_home,
+        XDG_CACHE_HOME,
         'popcon',
         "%s.%s" % (key, pickle.format_version))  # implements BASEDIRSPEC
 
