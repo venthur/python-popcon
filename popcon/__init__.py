@@ -1,1 +1,1 @@
-from debianbts.version import __version__
+from popcon.version import __version__
