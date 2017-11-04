@@ -13,6 +13,6 @@ setup(
     url='http://github.com/venthur/python-popcon',
     license='GPL2',
     packages=['popcon'],
-    install_requires=['xdg'],
+    install_requires=['xdg == 0.25'],
     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, <4',
 )
