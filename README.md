@@ -2,6 +2,18 @@
 
 Get Debian popcon values for given packages.
 
+This package supports Python2 and Python3
+
+
+## Installation
+
+```bash
+$ pip install popcon
+```
+
+
+## Usage
+
 The usage of this module is easy:
 
 ```python
@@ -27,3 +39,11 @@ than `EXPIRY` seconds (default is 7 days) it will download fresh data and save
 that.
 
 The cached data will be kept in memory unless `KEEP_DATA` is set to False.
+
+
+## Command Line Interface
+
+```
+$ popcon reportbug
+{'reportbug': 177670}
+```
