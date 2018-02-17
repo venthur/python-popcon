@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [1.5.1] - 2018-02-17
 
 * Fixed __main__ handling in __main__.py
 

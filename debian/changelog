@@ -1,3 +1,9 @@
+python-popcon (1.5.1) unstable; urgency=medium
+
+  * Minor fix in __main__.py
+
+ -- Bastian Venthur <venthur@debian.org>  Sat, 17 Feb 2018 15:30:00 +0100
+
 python-popcon (1.5.0) unstable; urgency=medium
 
   * Updated packaging (setup.py, etc)
