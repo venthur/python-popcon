@@ -2,7 +2,7 @@ from __future__ import absolute_import, print_function
 
 import sys
 
-from popcon.popcon import package
+from popcon import package
 
 
 def main():
@@ -12,4 +12,6 @@ def main():
     print(pkg)
     print(package(pkg))
 
-main()
+
+if __name__ == '__main__':
+    main()

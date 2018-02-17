@@ -1,5 +1,9 @@
 # Changelog
 
+## [unreleased]
+
+* Fixed __main__ handling in __main__.py
+
 ## [1.5.0] - 2017-11-04
 
 * Updated packaging (setup.py, etc)
