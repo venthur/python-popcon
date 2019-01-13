@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+
 
 from popcon.version import __version__
 from popcon.popcon import (

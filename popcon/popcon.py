@@ -49,30 +49,14 @@ The cached data will be kept in memory unless `KEEP_DATA` is set to False.
 
 """
 
-from __future__ import division, print_function
 
 import warnings
 import time
-try:
-    # python2
-    from urllib2 import Request, urlopen
-except ImportError:
-    # python3
-    from urllib.request import Request, urlopen
+from urllib.request import Request, urlopen
 import gzip
-try:
-    # python2
-    import StringIO as io
-except ImportError:
-    # python3
-    import io
+import io
 import tempfile
-try:
-    # python2
-    import cPickle as pickle
-except ImportError:
-    # python3
-    import pickle
+import pickle
 import os
 import collections
 
@@ -184,12 +168,7 @@ def _decompress(compressed):
         the uncompressed string
 
     """
-    try:
-        # python2
-        gzippedstream = io.StringIO(compressed)
-    except TypeError:
-        # python3
-        gzippedstream = io.BytesIO(compressed)
+    gzippedstream = io.BytesIO(compressed)
     gzipper = gzip.GzipFile(fileobj=gzippedstream)
     data = gzipper.read()
     return data
