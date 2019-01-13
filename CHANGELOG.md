@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.0] - 2019-01-13
+
+* Dropped Python2 support
+* moved to pytest
+* added Makefile, setup.cfg, flake8
+* Fixed lots of pep8 errors
+
 ## [1.5.1] - 2018-02-17
 
 * Fixed __main__ handling in __main__.py

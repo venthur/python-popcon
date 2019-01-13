@@ -1,28 +1,21 @@
-import unittest
-
 import popcon
 
 
-class TestPopcon(unittest.TestCase):
-
-    def test_version(self):
-        try:
-            popcon.__version__
-        except NameError:
-            self.fail()
-
-    def test_package(self):
-        popcon.package('reportbug')
-
-    def test_package_raw(self):
-        popcon.package_raw('reportbug')
-
-    def test_source_package(self):
-        popcon.source_package('reportbug')
-
-    def test_source_package_raw(self):
-        popcon.source_package_raw('reportbug')
+def test_version():
+    assert hasattr(popcon, '__version__')
 
 
-if __name__ == '__main__':
-    unittest.main()
+def test_package():
+    popcon.package('reportbug')
+
+
+def test_package_raw():
+    popcon.package_raw('reportbug')
+
+
+def test_source_package():
+    popcon.source_package('reportbug')
+
+
+def test_source_package_raw():
+    popcon.source_package_raw('reportbug')
