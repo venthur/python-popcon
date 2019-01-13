@@ -1,3 +1,9 @@
+python-popcon (2.0.0) unstable; urgency=medium
+
+  * Dropped Python2 support
+
+ -- Bastian Venthur <venthur@debian.org>  Sun, 13 Jan 2019 14:04:35 +0100
+
 python-popcon (1.5.1) unstable; urgency=medium
 
   * Minor fix in __main__.py
