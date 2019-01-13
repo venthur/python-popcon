@@ -336,9 +336,3 @@ def _package_raw_generic(url, parse, key, *packages):
     if KEEP_DATA:
         cached_data[key] = data
     return ans
-
-
-if __name__ == "__main__":
-    print(package('reportbug-ng'))
-    print(source_package('reportbug-ng', 'reportbug'))
-    print(package('reportbug-ng', 'reportbug'))
