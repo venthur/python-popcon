@@ -40,12 +40,13 @@ the raw numbers is the number of installations as reported by
             'reportbug': Package(vote=5279, old=59652, recent=10118,
             no_files=16)}
 
-Behind the scene popcon will try to use cached information saved in a file in
-the ~/.cache/popcon directory. If the relevant file is not available, or older
-than `EXPIRY` seconds (default is 7 days) it will download fresh data and save
-that.
+Behind the scene popcon will try to use cached information saved in a
+file in the ~/.cache/popcon directory. If the relevant file is not
+available, or older than `EXPIRY` seconds (default is 7 days) it will
+download fresh data and save that.
 
-The cached data will be kept in memory unless `KEEP_DATA` is set to False.
+The cached data will be kept in memory unless `KEEP_DATA` is set to
+False.
 
 """
 
@@ -148,7 +149,7 @@ def _parse_stats(results):
             int(elems[2])  # e.g. skip pass the "not in sid" pseudo-package
             if elems[1] == b"Total":
                 continue
-        except:
+        except Exception:
             continue
         ans[elems[1]] = Package(*(int(i) for i in elems[3:]))
     return ans
@@ -297,25 +298,30 @@ def _package_raw_generic(url, parse, key, *packages):
 
     """
     global cached_data, cached_timestamp
+    # implements BASEDIRSPEC
+    # http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html
     dumpfile = os.path.join(
         XDG_CACHE_HOME,
         'popcon',
-        "%s.%s" % (key, pickle.format_version))  # implements BASEDIRSPEC
+        "%s.%s" % (key, pickle.format_version))
 
     earliest_possible_mtime = max(
         time.time() - EXPIRY,
         os.stat(__file__).st_mtime)
 
-    if key in cached_data and cached_timestamp.get(key, 0) <= earliest_possible_mtime:
+    if (key in cached_data
+            and cached_timestamp.get(key, 0) <= earliest_possible_mtime):
         del cached_data[key]
 
     data = cached_data.get(key, None)
-    if data is None and os.path.exists(dumpfile) and os.stat(dumpfile).st_mtime > earliest_possible_mtime:
+    if (data is None
+            and os.path.exists(dumpfile)
+            and os.stat(dumpfile).st_mtime > earliest_possible_mtime):
         try:
             with open(dumpfile, 'rb') as fh:
                 data = pickle.load(fh)
             cached_timestamp[key] = os.stat(dumpfile).st_mtime
-        except:
+        except Exception:
             import traceback
             warnings.warn("Problems loading cache file: %s" % dumpfile)
             traceback.print_exc()
@@ -323,7 +329,8 @@ def _package_raw_generic(url, parse, key, *packages):
     if data is None:
         data = _fetch(url)
         data = parse(data)
-        if not os.path.isdir(os.path.dirname(dumpfile)):  # i still think that makedirs should behave like mkdir -p
+        # i still think that makedirs should behave like mkdir -p
+        if not os.path.isdir(os.path.dirname(dumpfile)):
             os.makedirs(
                 os.path.dirname(dumpfile),
                 mode=0o700)  # mode according to BASEDIRSPEC
@@ -341,8 +348,8 @@ def _package_raw_generic(url, parse, key, *packages):
         cached_timestamp[key] = time.time()
     ans = dict()
     for pkg in packages:
-        # Lookup using bytestrings, but always index results by the original so
-        # that callsites can look it up.
+        # Lookup using bytestrings, but always index results by the
+        # original so that callsites can look it up.
         lookup = pkg if isinstance(pkg, bytes) else pkg.encode('utf-8')
         if lookup in data:
             ans[pkg] = data[lookup]
@@ -351,7 +358,7 @@ def _package_raw_generic(url, parse, key, *packages):
     return ans
 
 
-if __name__ ==  "__main__":
+if __name__ == "__main__":
     print(package('reportbug-ng'))
     print(source_package('reportbug-ng', 'reportbug'))
     print(package('reportbug-ng', 'reportbug'))
