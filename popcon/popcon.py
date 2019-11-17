@@ -40,6 +40,10 @@ import tempfile
 import pickle
 import os
 import collections
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 XDG_CACHE_HOME = os.environ.get('XDG_CACHE_HOME',
@@ -155,16 +159,18 @@ def _decompress(compressed):
     return data
 
 
-def package(*packages):
+def package(*package_list):
     """Return the number of installations.
 
     The return value is a dict where the keys are the packages and the
     values the number of installations. If a package was not found it is
     not in the dict.
 
+    This function is deprecated, please use `packages` instead.
+
     Parameters
     ----------
-    packages : tuple of strings
+    package_list : tuple of strings
         the package names
 
     Returns
@@ -173,14 +179,63 @@ def package(*packages):
         packagename -> number of installations mapping
 
     """
-    raw = package_raw(*packages)
+    logger.warning('package is deprecated, please use packages instead')
+    return packages(*package_list)
+
+
+def packages(package_list):
+    """Return the number of installations.
+
+    The return value is a dict where the keys are the packages and the
+    values the number of installations. If a package was not found it is
+    not in the dict.
+
+    Parameters
+    ----------
+    package_list : list of strings
+        the package names
+
+    Returns
+    -------
+    ans : dict
+        packagename -> number of installations mapping
+
+    """
+    raw = packages_raw(package_list)
     ans = dict()
     for pkg, values in list(raw.items()):
         ans[pkg] = sum(values)
     return ans
 
 
-def source_package(*packages):
+def source_package(*package_list):
+    """Return the number of installations, for source packages.
+
+    See `package` for the format of the returned data.
+
+    At present, this is only an approximation that instead gives the
+    maximum value, out of the number of installations of any binary
+    package belonging to each source package.
+
+    This function is deprecated, please use `source_packages` instead.
+
+    Parameters
+    ----------
+    package_list : tuple of strings
+        the package names
+
+    Returns
+    -------
+    ans : dict
+        packagename -> number of installations mapping
+
+    """
+    logger.warning(
+            'source_package is deprecated, please use source_packages instead')
+    return source_packages(*package_list)
+
+
+def source_packages(package_list):
     """Return the number of installations, for source packages.
 
     See `package` for the format of the returned data.
@@ -191,7 +246,7 @@ def source_package(*packages):
 
     Parameters
     ----------
-    packages : tuple of strings
+    package_list : list of strings
         the package names
 
     Returns
@@ -200,14 +255,44 @@ def source_package(*packages):
         packagename -> number of installations mapping
 
     """
-    raw = source_package_raw(*packages)
+    raw = source_packages_raw(package_list)
     ans = dict()
     for pkg, values in list(raw.items()):
         ans[pkg] = sum(values)
     return ans
 
 
-def package_raw(*packages):
+def package_raw(*package_list):
+    """Return the raw popcon values for the given packages.
+
+    The return value is a dict where the keys are the packages and the
+    values a named tuple of integers: (vote, old, recent, no-files)
+
+    * vote: number of people who use this package regulary
+    * old: is the number of people who installed, but don't use this
+      package regularly
+    * recent: is the number of people who upgraded this package recently
+    * no-files: is the number of people whose entry didn't contain
+      enough information (atime and ctime were 0)
+
+    This function is deprecated, please use `packages_raw` instead.
+
+    Parameters
+    ----------
+    package_list : tuple of strings
+        the package names
+
+    Returns
+    -------
+    ans : dict
+
+    """
+    logger.warning(
+            'package_raw is deprecated, please use packages_raw instead')
+    return packages_raw(*package_list)
+
+
+def packages_raw(package_list):
     """Return the raw popcon values for the given packages.
 
     The return value is a dict where the keys are the packages and the
@@ -222,7 +307,7 @@ def package_raw(*packages):
 
     Parameters
     ----------
-    packages : tuple of strings
+    package_list : list of strings
         the package names
 
     Returns
@@ -230,12 +315,37 @@ def package_raw(*packages):
     ans : dict
 
     """
-    return _package_raw_generic(
+    return _packages_raw_generic(
         "http://popcon.debian.org/all-popcon-results.txt.gz",
-        _parse, "debian", *packages)
+        _parse, "debian", package_list)
 
 
-def source_package_raw(*packages):
+def source_package_raw(*package_list):
+    """Return the raw popcon values for the given source packages.
+
+    See `package_raw` for the format of the returned data.
+
+    At present, this is only an approximation that instead gives the
+    maximum value, out of the number of installations of any binary
+    package belonging to each source package.
+
+    This function is deprecated, please use `source_packages_raw` instead.
+
+    Parameters
+    ----------
+    package_list : tuple of strings
+
+    Returns
+    -------
+    ans : dict
+
+    """
+    logger.warning('source_package_raw is deprecated, please use'
+                   ' source_packages_raw  instead')
+    return source_packages_raw(*package_list)
+
+
+def source_packages_raw(package_list):
     """Return the raw popcon values for the given source packages.
 
     See `package_raw` for the format of the returned data.
@@ -246,19 +356,19 @@ def source_package_raw(*packages):
 
     Parameters
     ----------
-    packages : tuple of strings
+    package_list : list of strings
 
     Returns
     -------
     ans : dict
 
     """
-    return _package_raw_generic(
+    return _packages_raw_generic(
         "http://popcon.debian.org/sourcemax/by_inst.gz",
-        _parse_stats, "debian-sourcemax", *packages)
+        _parse_stats, "debian-sourcemax", package_list)
 
 
-def _package_raw_generic(url, parse, key, *packages):
+def _packages_raw_generic(url, parse, key, package_list):
     """The work mule
 
     Parameters
@@ -269,7 +379,7 @@ def _package_raw_generic(url, parse, key, *packages):
         the parser function
     key : str
         "debian-sourcemax" or "debian"
-    packages : tuple of strings
+    package_list : list of strings
         the debian package names
 
     Returns
@@ -327,7 +437,7 @@ def _package_raw_generic(url, parse, key, *packages):
             pass
         cached_timestamp[key] = time.time()
     ans = dict()
-    for pkg in packages:
+    for pkg in package_list:
         # Lookup using bytestrings, but always index results by the
         # original so that callsites can look it up.
         lookup = pkg if isinstance(pkg, bytes) else pkg.encode('utf-8')

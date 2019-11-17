@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.1] - 2019-11-17
+
+* deprecated functions with packages as positional arguments, the new ones use
+  list of packages instead
+* removed useles requirements.txt
+* added html report to coverage
+
+
 ## [2.0.0] - 2019-01-13
 
 * Dropped Python2 support
