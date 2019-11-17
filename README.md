@@ -17,9 +17,9 @@ The usage of this module is easy:
 
 ```python
 >>> import popcon
->>> popcon.package('reportbug-ng')
+>>> popcon.packages(['reportbug-ng'])
 {'reportbug-ng': 323}
->>> popcon.package('reportbug-ng', 'reportbug')
+>>> popcon.packages(['reportbug-ng', 'reportbug'])
 {'reportbug-ng': 323, 'reportbug': 75065}
 ```
 
@@ -27,7 +27,7 @@ The raw data (vote, old, recent, no-file) is also available, the sum of the raw
 numbers is the number of installations as reported by `popcon.package`.
 
 ```python
->>> popcon.package_raw('reportbug-ng', 'reportbug')
+>>> popcon.packages_raw(['reportbug-ng', 'reportbug'])
 {'reportbug-ng': Package(vote=50, old=187, recent=86, no_files=0),
  'reportbug': Package(vote=5279, old=59652, recent=10118, no_files=16)}
 ```
