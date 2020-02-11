@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.3] - 2020-02-11
+
+* Fixed missing version bump
+
 ## [2.0.2] - 2020-02-11
 
 * Fixed main script to use the new-style functions introduced in 2.0.1

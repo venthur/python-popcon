@@ -1,3 +1,9 @@
+python-popcon (2.0.3) unstable; urgency=medium
+
+  * Fixed missing version bump (no changes)
+
+ -- Bastian Venthur <venthur@debian.org>  Tue, 11 Feb 2020 19:34:03 +0100
+
 python-popcon (2.0.2) unstable; urgency=medium
 
   * Fixed main script to use the new-style functions introduced in 2.0.1
