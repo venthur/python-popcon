@@ -1,6 +1,6 @@
 import sys
 
-from popcon import package
+from popcon import packages
 
 
 def main():
@@ -8,7 +8,7 @@ def main():
         raise RuntimeError('No package name given')
     pkg = sys.argv[1]
     print(pkg)
-    print(package(pkg))
+    print(packages([pkg]))
 
 
 if __name__ == '__main__':

@@ -1,3 +1,11 @@
+python-popcon (2.0.2) unstable; urgency=medium
+
+  * Fixed main script to use the new-style functions introduced in 2.0.1
+    (Closes #950963), thanks Gregor Herrmann!
+  * Import new-style functions in __init__.py
+
+ -- Bastian Venthur <venthur@debian.org>  Tue, 11 Feb 2020 15:56:49 +0100
+
 python-popcon (2.0.1) unstable; urgency=medium
 
   * deprecated functions with packages as positional arguments, the new ones
