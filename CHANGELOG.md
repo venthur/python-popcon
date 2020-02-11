@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.0.2] - 2020-02-11
+
+* Fixed main script to use the new-style functions introduced in 2.0.1
+* Import new-style functions in __init__.py
+
 ## [2.0.1] - 2019-11-17
 
 * deprecated functions with packages as positional arguments, the new ones use
