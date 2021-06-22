@@ -4,7 +4,7 @@ Maintainer: Bastian Venthur <venthur@debian.org>
 Build-Depends: debhelper-compat (= 12), dh-python, python3, python3-setuptools
 Standards-Version: 4.1.1
 Section: python
-Vcs-Git: https://github.com/venthur/python-popcon
+Vcs-Git: https://github.com/venthur/python-popcon.git
 Vcs-Browser: https://github.com/venthur/python-popcon
 
 Package: python3-popcon
