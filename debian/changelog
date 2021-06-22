@@ -1,3 +1,9 @@
+python-popcon (2.0.4) UNRELEASED; urgency=medium
+
+  * Bump debhelper from deprecated 9 to 12.
+
+ -- Debian Janitor <janitor@jelmer.uk>  Tue, 22 Jun 2021 19:22:12 -0000
+
 python-popcon (2.0.3) unstable; urgency=medium
 
   * Fixed missing version bump (no changes)
