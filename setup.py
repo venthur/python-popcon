@@ -17,13 +17,6 @@ setup(
     url='http://github.com/venthur/python-popcon',
     license='GPL2',
     packages=['popcon'],
-    extras_require={
-      'dev': [
-          'pytest',
-          'pytest-cov',
-          'flake8',
-      ]
-    },
     python_requires='>=3.4, <4',
     entry_points={
         'console_scripts': [
