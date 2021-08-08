@@ -17,7 +17,7 @@ setup(
     url='http://github.com/venthur/python-popcon',
     license='GPL2',
     packages=['popcon'],
-    python_requires='>=3.4, <4',
+    python_requires='>=3.6, <4',
     entry_points={
         'console_scripts': [
             'popcon = popcon.__main__:main'

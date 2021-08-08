@@ -1,4 +1,9 @@
 # Changelog
+## []
+
+* updated build system
+* use github actions instead of travis
+* bumped minimal Python version to 3.6
 
 ## [2.0.3] - 2020-02-11
 
