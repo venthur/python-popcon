@@ -56,7 +56,7 @@ Package = collections.namedtuple(
 
 
 # week in seconds
-EXPIRY = 86400 * 7
+EXPIRY = 60 * 60 * 24 * 7
 KEEP_DATA = True
 cached_data = {}
 cached_timestamp = {}
