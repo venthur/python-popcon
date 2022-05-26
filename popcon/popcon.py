@@ -41,6 +41,7 @@ import pickle
 import os
 import collections
 import logging
+import sqlite3
 
 
 logger = logging.getLogger(__name__)
@@ -340,3 +341,67 @@ def _packages_raw_generic(url, parse, key, package_list):
     if KEEP_DATA:
         cached_data[key] = data
     return ans
+
+
+def create_schema(con):
+    """Create the SQL schema.
+
+    Parameters
+    ----------
+    con : sqlite3.connection object
+
+    """
+    cur = con.cursor()
+    cur.execute("""
+        create table version(version integer not null);
+    """)
+
+    cur.execute("""
+        create table last_updated(
+            name text not null,
+            datetime timestamp
+        )
+    """)
+
+    cur.execute("""
+        insert into last_updated values
+            ("packages", null),
+            ("source_packages", null)
+        ;
+    """)
+
+
+    cur.execute("""
+        create table packages(
+            vote integer not null,
+            old integer not null,
+            recent integer not null,
+            no_files integer not null
+        );
+    """)
+
+    cur.execute("""
+        create table source_packages(
+            vote integer not null,
+            old integer not null,
+            recent integer not null,
+            no_files integer not null
+        );
+    """)
+
+    # the schema version is the major version of the popcon library
+    cur.execute("""
+        insert into version values (3);
+    """)
+
+    con.commit()
+
+
+
+
+
+
+
+
+
+
