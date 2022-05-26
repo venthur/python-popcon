@@ -1,5 +1,9 @@
 # Changelog
 
+## [unreleased]
+
+* updated dev dependencies
+
 ## [2.0.4] - 2021-08-08
 
 * updated build system
