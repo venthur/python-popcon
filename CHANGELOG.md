@@ -3,6 +3,7 @@
 ## [unreleased]
 
 * updated dev dependencies
+* Removed functions deprecated since 2.0.1
 * Added Python 3.10 to test suite
 
 ## [2.0.4] - 2021-08-08

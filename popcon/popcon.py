@@ -159,30 +159,6 @@ def _decompress(compressed):
     return data
 
 
-def package(*package_list):
-    """Return the number of installations.
-
-    The return value is a dict where the keys are the packages and the
-    values the number of installations. If a package was not found it is
-    not in the dict.
-
-    This function is deprecated, please use `packages` instead.
-
-    Parameters
-    ----------
-    package_list : tuple of strings
-        the package names
-
-    Returns
-    -------
-    ans : dict
-        packagename -> number of installations mapping
-
-    """
-    logger.warning('package is deprecated, please use packages instead')
-    return packages(*package_list)
-
-
 def packages(package_list):
     """Return the number of installations.
 
@@ -206,33 +182,6 @@ def packages(package_list):
     for pkg, values in list(raw.items()):
         ans[pkg] = sum(values)
     return ans
-
-
-def source_package(*package_list):
-    """Return the number of installations, for source packages.
-
-    See `package` for the format of the returned data.
-
-    At present, this is only an approximation that instead gives the
-    maximum value, out of the number of installations of any binary
-    package belonging to each source package.
-
-    This function is deprecated, please use `source_packages` instead.
-
-    Parameters
-    ----------
-    package_list : tuple of strings
-        the package names
-
-    Returns
-    -------
-    ans : dict
-        packagename -> number of installations mapping
-
-    """
-    logger.warning(
-            'source_package is deprecated, please use source_packages instead')
-    return source_packages(*package_list)
 
 
 def source_packages(package_list):
@@ -262,36 +211,6 @@ def source_packages(package_list):
     return ans
 
 
-def package_raw(*package_list):
-    """Return the raw popcon values for the given packages.
-
-    The return value is a dict where the keys are the packages and the
-    values a named tuple of integers: (vote, old, recent, no-files)
-
-    * vote: number of people who use this package regulary
-    * old: is the number of people who installed, but don't use this
-      package regularly
-    * recent: is the number of people who upgraded this package recently
-    * no-files: is the number of people whose entry didn't contain
-      enough information (atime and ctime were 0)
-
-    This function is deprecated, please use `packages_raw` instead.
-
-    Parameters
-    ----------
-    package_list : tuple of strings
-        the package names
-
-    Returns
-    -------
-    ans : dict
-
-    """
-    logger.warning(
-            'package_raw is deprecated, please use packages_raw instead')
-    return packages_raw(*package_list)
-
-
 def packages_raw(package_list):
     """Return the raw popcon values for the given packages.
 
@@ -318,31 +237,6 @@ def packages_raw(package_list):
     return _packages_raw_generic(
         "http://popcon.debian.org/all-popcon-results.txt.gz",
         _parse, "debian", package_list)
-
-
-def source_package_raw(*package_list):
-    """Return the raw popcon values for the given source packages.
-
-    See `package_raw` for the format of the returned data.
-
-    At present, this is only an approximation that instead gives the
-    maximum value, out of the number of installations of any binary
-    package belonging to each source package.
-
-    This function is deprecated, please use `source_packages_raw` instead.
-
-    Parameters
-    ----------
-    package_list : tuple of strings
-
-    Returns
-    -------
-    ans : dict
-
-    """
-    logger.warning('source_package_raw is deprecated, please use'
-                   ' source_packages_raw  instead')
-    return source_packages_raw(*package_list)
 
 
 def source_packages_raw(package_list):
