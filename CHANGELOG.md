@@ -3,6 +3,8 @@
 ## [unreleased]
 
 * updated dev dependencies
+* Use argparse for CLI
+* test the CLI
 * Removed functions deprecated since 2.0.1
 * Added Python 3.10 to test suite
 

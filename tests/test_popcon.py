@@ -23,6 +23,3 @@ def test_source_packages():
 def test_source_packages_raw():
     res = popcon.source_packages_raw(['reportbug', 'python-debianbts'])
     assert len(res) == 2
-
-
-
