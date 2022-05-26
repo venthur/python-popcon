@@ -7,3 +7,7 @@ def test_main_single_package():
 
 def test_main_multi_packages():
     cli.main('python-debianbts python3')
+
+
+def test_main_multi_packages_verbose():
+    cli.main('-v python-debianbts python3')

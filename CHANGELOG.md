@@ -4,6 +4,7 @@
 
 * bumped minimim Python version to 3.7
 * updated dev dependencies
+* Improved output and added verbose output
 * Use argparse for CLI
 * test the CLI
 * Removed functions deprecated since 2.0.1

@@ -1,6 +1,6 @@
 import argparse
 
-from popcon import packages
+from popcon import packages, packages_raw
 
 
 def main(args=None):
@@ -14,8 +14,31 @@ def main(args=None):
     """
     args = parse_args(args)
     pkg = args.package
-    print(pkg)
-    print(packages(pkg))
+    # respective withs for package and numbers
+    pwidth = 20
+    nwidth = 10
+    if not args.verbose:
+        results = packages(pkg)
+        if not results:
+            return
+        print('Popcon result(s) for:')
+        for package, number in results.items():
+            print(f'{package:>{pwidth}}: {number:>{nwidth}}')
+    else:
+        results = packages_raw(pkg)
+        if not results:
+            return
+        print('Popcon result(s) for:')
+        for package, values in results.items():
+            vote = values.vote
+            old = values.old
+            recent = values.recent
+            no_files = values.no_files
+            print(
+                f'{package:>{pwidth}}: '
+                f'{vote=:<{nwidth}} {old=:<{nwidth}} '
+                f'{recent=:<{nwidth}} {no_files=:<{nwidth}}'
+            )
 
 
 def parse_args(args=None):
@@ -37,6 +60,12 @@ def parse_args(args=None):
         'package',
         nargs="+",
         help="the package name(s)",
+    )
+
+    parser.add_argument(
+        '-v', '--verbose',
+        help="more verbose package output",
+        action="store_true",
     )
 
     return parser.parse_args(args)
