@@ -43,6 +43,17 @@ The cached data will be kept in memory unless `KEEP_DATA` is set to False.
 ## Command Line Interface
 
 ```
-$ popcon reportbug
-{'reportbug': 177670}
+popcon reportbug python
+             PACKAGE VALUE
+           reportbug 180558
+              python 110709
+```
+
+it also supports a more verbose mode on the command line:
+
+```
+popcon --verbose reportbug python
+             PACKAGE VOTE       OLD        RECENT     NO FILES
+           reportbug 5929       149243     25315      71
+              python 3985       103591     3066       67
 ```
