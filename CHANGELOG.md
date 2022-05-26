@@ -2,6 +2,7 @@
 
 ## [unreleased]
 
+* bumped minimim Python version to 3.7
 * updated dev dependencies
 * Use argparse for CLI
 * test the CLI
