@@ -14,7 +14,7 @@ setup(
     keywords='debian, popcon, popularity contest',
     author='Bastian Venthur',
     author_email='venthur@debian.org',
-    url='http://github.com/venthur/python-popcon',
+    url='https://github.com/venthur/python-popcon',
     license='GPL2',
     packages=['popcon'],
     python_requires='>=3.7, <4',

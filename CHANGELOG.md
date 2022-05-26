@@ -3,6 +3,7 @@
 ## [unreleased]
 
 * bumped minimim Python version to 3.7
+* use HTTPS everywhere
 * updated dev dependencies
 * Improved output and added verbose output
 * Use argparse for CLI

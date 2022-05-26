@@ -235,7 +235,7 @@ def packages_raw(package_list):
 
     """
     return _packages_raw_generic(
-        "http://popcon.debian.org/all-popcon-results.txt.gz",
+        "https://popcon.debian.org/all-popcon-results.txt.gz",
         _parse, "debian", package_list)
 
 
@@ -258,7 +258,7 @@ def source_packages_raw(package_list):
 
     """
     return _packages_raw_generic(
-        "http://popcon.debian.org/sourcemax/by_inst.gz",
+        "https://popcon.debian.org/sourcemax/by_inst.gz",
         _parse_stats, "debian-sourcemax", package_list)
 
 
@@ -283,7 +283,7 @@ def _packages_raw_generic(url, parse, key, package_list):
     """
     global cached_data, cached_timestamp
     # implements BASEDIRSPEC
-    # http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html
+    # https://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html
     dumpfile = os.path.join(
         XDG_CACHE_HOME,
         'popcon',
