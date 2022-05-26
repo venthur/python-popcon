@@ -21,23 +21,27 @@ def main(args=None):
         results = packages(pkg)
         if not results:
             return
-        print('Popcon result(s) for:')
+        print(f'{"PACKAGE":>{pwidth}} {"VALUE":<{nwidth}}')
         for package, number in results.items():
-            print(f'{package:>{pwidth}}: {number:>{nwidth}}')
+            print(f'{package:>{pwidth}} {number:<{nwidth}}')
     else:
         results = packages_raw(pkg)
         if not results:
             return
-        print('Popcon result(s) for:')
+        print(
+            f'{"PACKAGE":>{pwidth}} '
+            f'{"VOTE":<{nwidth}} {"OLD":<{nwidth}} '
+            f'{"RECENT":<{nwidth}} {"NO FILES":<{nwidth}}'
+        )
         for package, values in results.items():
             vote = values.vote
             old = values.old
             recent = values.recent
             no_files = values.no_files
             print(
-                f'{package:>{pwidth}}: '
-                f'{vote=:<{nwidth}} {old=:<{nwidth}} '
-                f'{recent=:<{nwidth}} {no_files=:<{nwidth}}'
+                f'{package:>{pwidth}} '
+                f'{vote:<{nwidth}} {old:<{nwidth}} '
+                f'{recent:<{nwidth}} {no_files:<{nwidth}}'
             )
 
 
