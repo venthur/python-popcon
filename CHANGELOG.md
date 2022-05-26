@@ -3,6 +3,7 @@
 ## [unreleased]
 
 * updated dev dependencies
+* Added Python 3.10 to test suite
 
 ## [2.0.4] - 2021-08-08
 
