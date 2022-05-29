@@ -1,3 +1,17 @@
+python-popcon (3.0.0) unstable; urgency=medium
+
+  * Removed functions deprecated since 2.0.1
+  * bumped minimim Python version to 3.7
+  * Added Python 3.10 to test suite
+  * use HTTPS everywhere
+  * updated dev dependencies
+  * Improved output and added verbose output (Closes: #1011634) Thanks Gregor
+    Herrmann for the patch, I ended up using a different solution.
+  * Use argparse for CLI
+  * test the CLI
+
+ -- Bastian Venthur <venthur@debian.org>  Sun, 29 May 2022 11:01:08 +0200
+
 python-popcon (2.0.4) unstable; urgency=medium
 
   * updated debian's build system

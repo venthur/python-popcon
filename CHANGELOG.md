@@ -1,15 +1,15 @@
 # Changelog
 
-## [unreleased]
+## [3.0.0] - 2022-05-29
 
+* Removed functions deprecated since 2.0.1
 * bumped minimim Python version to 3.7
+* Added Python 3.10 to test suite
 * use HTTPS everywhere
 * updated dev dependencies
 * Improved output and added verbose output
 * Use argparse for CLI
 * test the CLI
-* Removed functions deprecated since 2.0.1
-* Added Python 3.10 to test suite
 
 ## [2.0.4] - 2021-08-08
 
