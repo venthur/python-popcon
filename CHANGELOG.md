@@ -1,5 +1,10 @@
 # Changelog
 
+## [unreleased]
+
+* Improved tabular output, for long package names
+* Added the sum for verbose output
+
 ## [3.0.0] - 2022-05-29
 
 * Removed functions deprecated since 2.0.1
