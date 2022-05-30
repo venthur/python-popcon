@@ -1,3 +1,10 @@
+python-popcon (3.0.1) unstable; urgency=medium
+
+  * Improved tabular output for long package names
+  * Added the sum for verbose output
+
+ -- Bastian Venthur <venthur@debian.org>  Mon, 30 May 2022 19:16:05 +0200
+
 python-popcon (3.0.0) unstable; urgency=medium
 
   * Removed functions deprecated since 2.0.1

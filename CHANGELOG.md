@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [3.0.1] - 2022-05-30
 
 * Improved tabular output, for long package names
 * Added the sum for verbose output
