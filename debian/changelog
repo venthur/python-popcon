@@ -1,3 +1,9 @@
+python-popcon (3.0.2) unstable; urgency=medium
+
+  * bumped version to allow to migrate to Debian/testing (no changes)
+
+ -- Bastian Venthur <venthur@debian.org>  Sun, 26 Jun 2022 13:14:08 +0200
+
 python-popcon (3.0.1) unstable; urgency=medium
 
   * Improved tabular output for long package names

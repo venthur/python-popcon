@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.0.2] - 2022-06-26
+
+* bumped version to allow to migrate to Debian/testing (no changes)
+
 ## [3.0.1] - 2022-05-30
 
 * Improved tabular output, for long package names
