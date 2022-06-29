@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.0.3] - 2022-06-29
+
+* bumped version to allow for source-only upload in debian
+
 ## [3.0.2] - 2022-06-26
 
 * bumped version to allow to migrate to Debian/testing (no changes)
